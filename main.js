@@ -3,7 +3,7 @@ let svg = document.getElementById('comparison');
 let oneVectorLength = 5;
 
 //2del
-let DNA1 = 'AAACTATAATTTTTTATTGACATAAACTGGAAGTTTATGTTAGGATAAGCCAATC';
+let DNA1 = 'AAA-TATAATTTTTTATTGACATAAACTGGAAGTTTATGTTAGGATAAGCCAATC';
 let DNA2 = 'AAACTATAATTTTTTATTGACATAAACTTCCAGTTTATGTTAGGATAAGCCAATA';
 
 function partOfPath(x1, y1, x2, y2){
@@ -43,6 +43,10 @@ function drawComparison(){
                 path1 += partOfPath(x1, y1, x1, y1 + 1);
                 y1 +=1;
             }
+            if (DNA1[i] == '-'){
+                x1 += 1;
+                y1 -= 1;
+            }
             if (DNA2[i] == 'A'){
                 path2 += partOfPath(x2, y2, x2 - 1, y2);
                 x2 -=1;
@@ -58,6 +62,10 @@ function drawComparison(){
             if (DNA2[i] == 'G'){
                 path2 += partOfPath(x2, y2, x2, y2 + 1);
                 y2 +=1;
+            }
+            if (DNA2[i] == '-'){
+                x2 += 1;
+                y2 -= 1;
             }
         }
     }
