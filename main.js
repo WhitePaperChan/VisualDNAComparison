@@ -2,14 +2,23 @@
 let svg = document.getElementById('comparison');
 let oneVectorLength = 5;
 
-//2del
-let DNA1 = 'AAA-TATAATTTTTTATTGACATAAACTGGAAGTTTATGTTAGGATAAGCCAATC';
-let DNA2 = 'AAACTATAATTTTTTATTGACATAAACTTCCAGTTTATGTTAGGATAAGCCAATA';
-
 let importInput1 = document.getElementById('import1');
 let importInput2 = document.getElementById('import2');
 
 let compareButton = document.getElementById('run');
+
+let letters = {
+    'A': {x: -1, y: 0}, 
+    'C': {x: 0, y: -1}, 
+    'T': {x: 1, y: 0}, 
+    'U': {x: 1, y: 0}, 
+    'G': {x: 0, y: 0}, 
+    '-': {x: 1, y: -1}
+};
+
+//2del
+let DNA1 = 'AAA-TATAATTTTTTATTGACATAAACTGGAAGTTTATGTTAGGATAAGCCAATC';
+let DNA2 = 'AAACTATAATTTTTTATTGACATAAACTTCCAGTTTATGTTAGGATAAGCCAATA';
 
 importInput1.addEventListener("change", () => {
     let file = document.getElementById('import1').files[0];
@@ -55,45 +64,15 @@ function drawComparison(){
             x2 += 1;
             y2 -= 1;
         } else {
-            if (DNA1[i] == 'A'){
-                path1 += partOfPath(x1, y1, x1 - 1, y1);
-                x1 -=1;
+            if (letters[DNA1[i]]){
+                path1 += partOfPath(x1, y1, x1 + letters[DNA1[i]].x, y1 + letters[DNA1[i]].y);
+                x1 += letters[DNA1[i]].x; 
+                y1 += letters[DNA1[i]].y;
             }
-            if (DNA1[i] == 'C'){
-                path1 += partOfPath(x1, y1, x1, y1 - 1);
-                y1 -=1;
-            }
-            if (DNA1[i] == 'T'){
-                path1 += partOfPath(x1, y1, x1 + 1, y1);
-                x1 +=1;
-            }
-            if (DNA1[i] == 'G'){
-                path1 += partOfPath(x1, y1, x1, y1 + 1);
-                y1 +=1;
-            }
-            if (DNA1[i] == '-'){
-                x1 += 1;
-                y1 -= 1;
-            }
-            if (DNA2[i] == 'A'){
-                path2 += partOfPath(x2, y2, x2 - 1, y2);
-                x2 -=1;
-            }
-            if (DNA2[i] == 'C'){
-                path2 += partOfPath(x2, y2, x2, y2 - 1);
-                y2 -=1;
-            }
-            if (DNA2[i] == 'T'){
-                path2 += partOfPath(x2, y2, x2 + 1, y2);
-                x2 +=1;
-            }
-            if (DNA2[i] == 'G'){
-                path2 += partOfPath(x2, y2, x2, y2 + 1);
-                y2 +=1;
-            }
-            if (DNA2[i] == '-'){
-                x2 += 1;
-                y2 -= 1;
+            if (letters[DNA2[i]]){
+                path2 += partOfPath(x2, y2, x2 + letters[DNA2[i]].x, y2 + letters[DNA2[i]].y);
+                x2 += letters[DNA2[i]].x; 
+                y2 += letters[DNA2[i]].y;
             }
         }
     }
@@ -109,7 +88,7 @@ function drawPath(path, color, width){
     element.setAttribute('stroke', color);
     element.setAttribute('stroke-width', width);
     element.setAttribute('stroke-linecap', 'round');
-    element.setAttribute('vector-effect', 'non-scaling-stroke');
+    //element.setAttribute('vector-effect', 'non-scaling-stroke');
     svg.appendChild(element);
 }
 
