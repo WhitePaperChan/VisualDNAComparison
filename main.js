@@ -5,15 +5,16 @@ let oneVectorLength = 5;
 let importInput1 = document.getElementById('import1');
 let importInput2 = document.getElementById('import2');
 
+let naturalCheckbox = document.getElementById('natural');
+
 let compareButton = document.getElementById('run');
 
 let letters = {
-    'A': {x: -1, y: 0}, 
-    'C': {x: 0, y: -1}, 
-    'T': {x: 1, y: 0}, 
-    'U': {x: 1, y: 0}, 
-    'G': {x: 0, y: 1}, 
-    '-': {x: 1, y: -1}
+    'A': {x: -1, y: 0, length: 1}, 
+    'C': {x: 0, y: -1, length: 4}, 
+    'T': {x: 1, y: 0, length: 2}, 
+    'U': {x: 1, y: 0, length: 2}, 
+    'G': {x: 0, y: 1, length: 3}
 };
 
 //2del
@@ -21,29 +22,41 @@ let DNA1 = 'AAA-TATAATTTTTTATTGACATAAACTGGAAGTTTATGTTAGGATAAGCCAATC';
 let DNA2 = 'AAACTATAATTTTTTATTGACATAAACTTCCAGTTTATGTTAGGATAAGCCAATA';
 
 importInput1.addEventListener("change", () => {
-    let file = document.getElementById('import1').files[0];
+    let file = importInput1.files[0];
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onload = function() {
         read_result = reader.result;
         DNA1 = read_result;
+        reg = />.*/ig;
+        DNA1 = DNA1.split(reg).filter(function(value){return value != ''})[0];
+        DNA1 = DNA1.replaceAll('\r', '');
+        DNA1 = DNA1.replaceAll('\n', '');
+
     };
 });
 
 importInput2.addEventListener("change", () => {
-    let file = document.getElementById('import2').files[0];
+    let file = importInput2.files[0];
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onload = function() {
         read_result = reader.result;
         DNA2 = read_result;
+        reg = />.*/ig;
+        DNA2 = DNA2.split(reg).filter(function(value){return value != ''})[0];
+        DNA2 = DNA2.replaceAll('\r', '');
+        DNA2 = DNA2.replaceAll('\n', '');
     };
 });
 
+
 compareButton.addEventListener('click', drawComparison);
 
+
 function partOfPath(x1, y1, x2, y2){
-    return 'M ' + (x1 * oneVectorLength) + ', ' + (y1 * oneVectorLength) + '\n L' + (x2 * oneVectorLength) + ', ' + (y2 * oneVectorLength) + '\n';
+    return 'M ' + (x1 * oneVectorLength) + ', ' + (y1 * oneVectorLength) + 
+    '\n L' + (x2 * oneVectorLength) + ', ' + (y2 * oneVectorLength) + '\n';
 }
 
 function drawComparison(){
@@ -65,14 +78,32 @@ function drawComparison(){
             y2 -= 1;
         } else {
             if (letters[DNA1[i]]){
-                path1 += partOfPath(x1, y1, x1 + letters[DNA1[i]].x, y1 + letters[DNA1[i]].y);
-                x1 += letters[DNA1[i]].x; 
-                y1 += letters[DNA1[i]].y;
+                l = 1;
+                if (naturalCheckbox.checked == true){
+                    l = letters[DNA1[i]].length;
+                }
+                path1 += partOfPath(x1, y1, x1 + letters[DNA1[i]].x * l, y1 + letters[DNA1[i]].y * l);
+                x1 += letters[DNA1[i]].x * l; 
+                y1 += letters[DNA1[i]].y * l;
+            } 
+            if (DNA1[i] == "-"){
+                path1 += 'M ' + (x1 + oneVectorLength) + ', ' + (y1 - oneVectorLength) + "\n";
+                x1 += 1;
+                y1 -= 1;
             }
             if (letters[DNA2[i]]){
-                path2 += partOfPath(x2, y2, x2 + letters[DNA2[i]].x, y2 + letters[DNA2[i]].y);
-                x2 += letters[DNA2[i]].x; 
-                y2 += letters[DNA2[i]].y;
+                l = 1;
+                if (naturalCheckbox.checked == true){
+                    l = letters[DNA2[i]].length;
+                }
+                path2 += partOfPath(x2, y2, x2 + letters[DNA2[i]].x * l, y2 + letters[DNA2[i]].y * l);
+                x2 += letters[DNA2[i]].x * l; 
+                y2 += letters[DNA2[i]].y * l;
+            }
+            if (DNA2[i] == "-"){
+                path2 += 'M ' + (x2 + oneVectorLength) + ', ' + (y2 - oneVectorLength) + "\n";
+                x2 += 1;
+                y2 -= 1;
             }
         }
     }
