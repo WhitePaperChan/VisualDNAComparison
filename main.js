@@ -68,8 +68,9 @@ function drawComparison(){
     let x2 = 0;
     let y2 = svg.getBoundingClientRect().height / oneVectorLength;
     let length = Math.min(DNA1.length, DNA2.length);
+    let weirdSymbols = false;
     for (let i = 0; i < length; i++){
-        if (DNA1[i] == DNA2[i]){
+        if (DNA1[i] == DNA2[i] && letters[DNA1[i]]){
             path1 += partOfPath(x1, y1, x1 + 1, y1 - 1);
             path2 += partOfPath(x2, y2, x2 + 1, y2 - 1);
             x1 += 1;
@@ -86,10 +87,14 @@ function drawComparison(){
                 x1 += letters[DNA1[i]].x * l; 
                 y1 += letters[DNA1[i]].y * l;
             } 
-            if (DNA1[i] == "-"){
+            else if (DNA1[i] == "-"){
                 path1 += 'M ' + (x1 + oneVectorLength) + ', ' + (y1 - oneVectorLength) + "\n";
                 x1 += 1;
                 y1 -= 1;
+            }
+            else if (!weirdSymbols) {
+                weirdSymbols = true;
+                alert('Symbol ' + DNA1[i] + " can't be processed");
             }
             if (letters[DNA2[i]]){
                 l = 1;
@@ -104,6 +109,10 @@ function drawComparison(){
                 path2 += 'M ' + (x2 + oneVectorLength) + ', ' + (y2 - oneVectorLength) + "\n";
                 x2 += 1;
                 y2 -= 1;
+            }
+            else if (!weirdSymbols) {
+                weirdSymbols = true;
+                alert('Symbol ' + DNA2[i] + " can't be processed");
             }
         }
     }
@@ -122,5 +131,3 @@ function drawPath(path, color, width){
     //element.setAttribute('vector-effect', 'non-scaling-stroke');
     svg.appendChild(element);
 }
-
-drawComparison();
