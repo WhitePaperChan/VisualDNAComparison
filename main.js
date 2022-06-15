@@ -8,6 +8,10 @@ let importInput2 = document.getElementById('import2');
 let naturalCheckbox = document.getElementById('natural');
 
 let compareButton = document.getElementById('run');
+let exportButton = document.getElementById('export');
+
+let sequenceText1 = document.getElementById('seq1');
+let sequenceText2 = document.getElementById('seq2');
 
 let letters = {
     'A': {x: -1, y: 0, length: 1}, 
@@ -18,8 +22,7 @@ let letters = {
 };
 
 //2del
-let DNA1 = 'AAA-TATAATTTTTTATTGACATAAACTGGAAGTTTATGTTAGGATAAGCCAATC';
-let DNA2 = 'AAACTATAATTTTTTATTGACATAAACTTCCAGTTTATGTTAGGATAAGCCAATA';
+let XNA = ['', '', '', ''];
 
 importInput1.addEventListener("change", () => {
     let file = importInput1.files[0];
@@ -27,12 +30,12 @@ importInput1.addEventListener("change", () => {
     reader.readAsText(file);
     reader.onload = function() {
         read_result = reader.result;
-        DNA1 = read_result;
-        reg = />.*/ig;
-        DNA1 = DNA1.split(reg).filter(function(value){return value != ''})[0];
-        DNA1 = DNA1.replaceAll('\r', '');
-        DNA1 = DNA1.replaceAll('\n', '');
-
+        XNA[0] = read_result;
+        reg = />.*/i;
+        XNA[0] = XNA[0].split(reg).filter(function(value){return value != ''})[0];
+        XNA[0] = XNA[0].replaceAll('\r', '');
+        XNA[0] = XNA[0].replaceAll('\n', '');
+        sequenceText1.textContent = XNA[0];
     };
 });
 
@@ -42,16 +45,29 @@ importInput2.addEventListener("change", () => {
     reader.readAsText(file);
     reader.onload = function() {
         read_result = reader.result;
-        DNA2 = read_result;
-        reg = />.*/ig;
-        DNA2 = DNA2.split(reg).filter(function(value){return value != ''})[0];
-        DNA2 = DNA2.replaceAll('\r', '');
-        DNA2 = DNA2.replaceAll('\n', '');
+        XNA[1] = read_result;
+        reg = />.*/i;
+        XNA[1] = XNA[1].split(reg).filter(function(value){return value != ''})[0];
+        XNA[1] = XNA[1].replaceAll('\r', '');
+        XNA[1] = XNA[1].replaceAll('\n', '');
+        sequenceText2.textContent = XNA[1];
     };
 });
 
 
 compareButton.addEventListener('click', drawComparison);
+
+exportButton.addEventListener("click", () => {
+    let svgData = svg.outerHTML;
+    let svgBlob = new Blob([svgData], {type:"image/svg+xml"});
+    let svgUrl = URL.createObjectURL(svgBlob);
+    let downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = "xna_visual_compare.svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+});
 
 
 function partOfPath(x1, y1, x2, y2){
@@ -67,10 +83,10 @@ function drawComparison(){
     let y1 = svg.getBoundingClientRect().height / oneVectorLength;
     let x2 = 0;
     let y2 = svg.getBoundingClientRect().height / oneVectorLength;
-    let length = Math.min(DNA1.length, DNA2.length);
+    let length = Math.min(XNA[0].length, XNA[1].length);
     let weirdSymbols = false;
     for (let i = 0; i < length; i++){
-        if (DNA1[i] == DNA2[i] && letters[DNA1[i]]){
+        if (XNA[0][i] == XNA[1][i] && letters[XNA[0][i]]){
             path1 += partOfPath(x1, y1, x1 + 1, y1 - 1);
             path2 += partOfPath(x2, y2, x2 + 1, y2 - 1);
             x1 += 1;
@@ -78,41 +94,41 @@ function drawComparison(){
             x2 += 1;
             y2 -= 1;
         } else {
-            if (letters[DNA1[i]]){
+            if (letters[XNA[0][i]]){
                 l = 1;
                 if (naturalCheckbox.checked == true){
-                    l = letters[DNA1[i]].length;
+                    l = letters[XNA[0][i]].length;
                 }
-                path1 += partOfPath(x1, y1, x1 + letters[DNA1[i]].x * l, y1 + letters[DNA1[i]].y * l);
-                x1 += letters[DNA1[i]].x * l; 
-                y1 += letters[DNA1[i]].y * l;
+                path1 += partOfPath(x1, y1, x1 + letters[XNA[0][i]].x * l, y1 + letters[XNA[0][i]].y * l);
+                x1 += letters[XNA[0][i]].x * l; 
+                y1 += letters[XNA[0][i]].y * l;
             } 
-            else if (DNA1[i] == "-"){
+            else if (XNA[0][i] == "-"){
                 path1 += 'M ' + (x1 + oneVectorLength) + ', ' + (y1 - oneVectorLength) + "\n";
                 x1 += 1;
                 y1 -= 1;
             }
             else if (!weirdSymbols) {
                 weirdSymbols = true;
-                alert('Symbol ' + DNA1[i] + " can't be processed");
+                alert('Symbol ' + XNA[0][i] + " can't be processed");
             }
-            if (letters[DNA2[i]]){
+            if (letters[XNA[1][i]]){
                 l = 1;
                 if (naturalCheckbox.checked == true){
-                    l = letters[DNA2[i]].length;
+                    l = letters[XNA[1][i]].length;
                 }
-                path2 += partOfPath(x2, y2, x2 + letters[DNA2[i]].x * l, y2 + letters[DNA2[i]].y * l);
-                x2 += letters[DNA2[i]].x * l; 
-                y2 += letters[DNA2[i]].y * l;
+                path2 += partOfPath(x2, y2, x2 + letters[XNA[1][i]].x * l, y2 + letters[XNA[1][i]].y * l);
+                x2 += letters[XNA[1][i]].x * l; 
+                y2 += letters[XNA[1][i]].y * l;
             }
-            if (DNA2[i] == "-"){
+            else if (XNA[1][i] == "-"){
                 path2 += 'M ' + (x2 + oneVectorLength) + ', ' + (y2 - oneVectorLength) + "\n";
                 x2 += 1;
                 y2 -= 1;
             }
             else if (!weirdSymbols) {
                 weirdSymbols = true;
-                alert('Symbol ' + DNA2[i] + " can't be processed");
+                alert('Symbol ' + XNA[1][i] + " can't be processed");
             }
         }
     }
@@ -128,6 +144,5 @@ function drawPath(path, color, width){
     element.setAttribute('stroke', color);
     element.setAttribute('stroke-width', width);
     element.setAttribute('stroke-linecap', 'round');
-    //element.setAttribute('vector-effect', 'non-scaling-stroke');
     svg.appendChild(element);
 }
