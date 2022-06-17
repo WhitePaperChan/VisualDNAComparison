@@ -13,6 +13,9 @@ let exportButton = document.getElementById('export');
 let sequenceText1 = document.getElementById('seq1');
 let sequenceText2 = document.getElementById('seq2');
 
+let colorPicker1 = document.getElementById('color1');
+let colorPicker2 = document.getElementById('color2');
+
 let letters = {
     'A': {x: -1, y: 0, length: 1}, 
     'C': {x: 0, y: -1, length: 4}, 
@@ -23,6 +26,9 @@ let letters = {
 
 //2del
 let XNA = ['', '', '', ''];
+
+let color1 = "#FF0000";
+let color2 = "#0000FF";
 
 importInput1.addEventListener("change", () => {
     let file = importInput1.files[0];
@@ -69,6 +75,13 @@ exportButton.addEventListener("click", () => {
     document.body.removeChild(downloadLink);
 });
 
+colorPicker1.addEventListener('change', () => {
+    color1 = colorPicker1.value;
+});
+
+colorPicker2.addEventListener('change', () => {
+    color2 = colorPicker2.value;
+});
 
 function partOfPath(x1, y1, x2, y2){
     return 'M ' + (x1 * oneVectorLength) + ', ' + (y1 * oneVectorLength) + 
@@ -134,8 +147,8 @@ function drawComparison(){
     }
     path1 += 'z';
     path2 += 'z';
-    drawPath(path1, 'red', 0.5);
-    drawPath(path2, 'blue', 1);
+    drawPath(path1, color1, 0.5);
+    drawPath(path2, color2, 1);
 }
 
 function drawPath(path, color, width){
