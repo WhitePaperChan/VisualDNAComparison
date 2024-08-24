@@ -1,35 +1,69 @@
 <!DOCTYPE html>
 <html>
-        <head>
-        <meta charset="utf-8">
-        <title>VisualComparison</title>
+    <head>
+      <meta charset="utf-8">
+      <title>VisualComparison</title>
     </head>
     <body>
+      <div id="overlay">
+      </div>
+      <div>
         <label for="import1" class="button">
           DNA1
         </label>
         <input type="file" id="import1">
-        <span id="seq1">There are no sequence 1</span>
+        <input type="checkbox" id="seq1check">
+        <label for="seq1check">
+          Edit
+        </label>
+        <br>
+        <textarea id="seq1edit" rows="5" cols="80" disabled="true"></textarea>
         <br>
         <label for="import2" class="button">
           DNA2
         </label>
         <input type="file" id="import2">
-        <span id="seq2">There are no sequence 2</span>
+        <input type="checkbox" id="seq2check">
+        <label for="seq2check">
+          Edit
+        </label>
         <br>
-        <input type="checkbox" id="natural">
+        <textarea id="seq2edit" rows="5" cols="80" disabled="true"></textarea>
+        <br>
+        <input type="checkbox" id="natural" checked=true>
         <label for="natural">
           Natural
         </label>
-        <input type="color" id="color1" value="#FF0000">
-        <input type="color" id="color2" value="#0000FF">
+        <input type="checkbox" id="shorter" checked=true>
+        <label for="shorter">
+          Shorter identical sequences
+        </label>
+        <br>
+        <span>Length of identical sequences (n - amount of nucleotides)</span>
+        <br>
+        <input type="radio" id="identicalN" name="identical" value="identicalN">
+        <label for="identicalN">n</label>
+        <input type="radio" id="identicalSqrtN" name="identical" value="identicalSqrtN" checked>
+        <label for="identicalSqrtN">sqrt(n)</label>
+        <input type="radio" id="identicalLnN" name="identical" value="identicalLnN">
+        <label for="identicalLnN">ln(n)</label>
+        <br>
+        <input type="color" id="color1" value="#000000">
+        <input type="color" id="color2" value="#bbbbbb">
+        <br>
+        <input type="number" id="width1" value="1" size="4">
+        <label for="width">Width 1</label>
+        <input type="number" id="width2" value="2" size="4">
+        <label for="width">Width 2</label>
         <br>
         <input type="button" id="run" value="Compare" class="button">
+        <input type="button" id="reset" value="Reset panning" class="button">
         <input type="button" id="export" value="Export" class="button">
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" id="comparison"></svg>
-        </div>
-        <link rel="stylesheet" href="style.css">
-        <script src="main.js"></script>
+      </div>
+      <div>
+            <svg xmlns="http://www.w3.org/2000/svg" id="comparison" viewBox="0 0 1000 1000"></svg>
+      </div>
+      <link rel="stylesheet" href="style.css">
+      <script src="main.js"></script>
     </body>
 </html>
