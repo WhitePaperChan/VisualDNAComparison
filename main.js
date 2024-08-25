@@ -236,7 +236,7 @@ function parseFasta(text, id){
     sequences[0] = sequences[0].replaceAll('\r', '');
     sequences[0] = sequences[0].replaceAll('\n', '');
     sequences[0] = sequences[0].replaceAll(' ', '');
-    XNA[id] = sequences[0];
+    return sequences[0];
 }
 
 function createOvelay(descriptions, sequences, id){
