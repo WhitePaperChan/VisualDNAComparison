@@ -2,7 +2,7 @@
  
 This project is made for [Laboratory of Adaptational Biotechnology, ICBGE NASU](https://icbge.org.ua/ukr/Лабораторія_адаптаційної_біотехнології) as a bachelor's project and a master's dissertation.
 
-[Official version](https://xna.icbge.org.ua/VisualDNAComparison/)
+[Official version (ICBGE fork)](https://xna.icbge.org.ua/VisualDNAComparison/)
 
 [Застосунок візуального порівняння нуклеотидних послідовностей в біомедичних дослідженнях (bachelor's work)](https://ela.kpi.ua/handle/123456789/48590)
 
